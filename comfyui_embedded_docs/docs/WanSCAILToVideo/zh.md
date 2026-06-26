@@ -9,28 +9,35 @@ WanSCAILToVideo 节点用于为视频生成准备 conditioning 和空潜在空�
 | `正向` | 正 conditioning 输入。 | CONDITIONING | 是 | - |
 | `负向` | 负 conditioning 输入。 | CONDITIONING | 是 | - |
 | `vae` | 用于编码图像和视频帧的 VAE 模型。 | VAE | 是 | - |
-| `宽度` | 输出视频的宽度（像素），默认值：512。必须能被 8 整除。 | INT | 是 | 32 至 MAX_RESOLUTION |
-| `高度` | 输出视频的高度（像素），默认值：896。必须能被 8 整除。 | INT | 是 | 32 至 MAX_RESOLUTION |
-| `长度` | 视频的帧数，默认值：81。必须能被 4 整除。 | INT | 是 | 1 至 MAX_RESOLUTION |
-| `批量大小` | 每批生成的视频数量，默认值：1。 | INT | 是 | 1 至 4096 |
-| `clip视觉输出` | 可选的 CLIP 视觉输出，用于 conditioning。 | CLIP_VISION_OUTPUT | 否 | - |
-| `参考图像` | 可选的参考图像，用于 conditioning。 | IMAGE | 否 | - |
 | `姿态视频` | 用于姿态 conditioning 的视频。将被缩小至主视频分辨率的一半。 | IMAGE | 否 | - |
+| `pose_video_mask` | 用于姿态 conditioning 的视频。将被缩小至主视频分辨率的一半。 | IMAGE | 否 | - |
+| `参考图像` | 可选的参考图像，用于 conditioning。 | IMAGE | 否 | - |
+| `reference_image_mask` | 用于姿态 conditioning 的视频。将被缩小至主视频分辨率的一半。 | IMAGE | 否 | - |
+| `clip视觉输出` | 可选的 CLIP 视觉输出，用于 conditioning。 | CLIP_VISION_OUTPUT | 否 | - |
+| `previous_frames` | 可选的 CLIP 视觉输出，用于 conditioning。 | CLIP_VISION_OUTPUT | 否 | - |
+| `宽度` | 输出视频的宽度（像素），默认值：512。必须能被 32 整除。 | INT | 是 | 32 至 MAX_RESOLUTION |
+| `高度` | 输出视频的高度（像素），默认值：896。必须能被 32 整除。 | INT | 是 | 32 至 MAX_RESOLUTION |
+| `长度` | 视频的帧数，默认值：81。必须除以4余1。 | INT | 是 | 1 至 MAX_RESOLUTION |
+| `批量大小` | 每批生成的视频数量，默认值：1。 | INT | 是 | 1 至 4096 |
 | `姿态强度` | 姿态潜在向量的强度，默认值：1.0。 | FLOAT | 是 | 0.0 至 10.0 |
 | `姿态起始步` | 开始使用姿态 conditioning 的步骤，默认值：0.0。 | FLOAT | 是 | 0.0 至 1.0 |
 | `姿态结束步` | 结束使用姿态 conditioning 的步骤，默认值：1.0。 | FLOAT | 是 | 0.0 至 1.0 |
-
+| `video_frame_offset` | 结束使用姿态 conditioning 的步骤，默认值：1.0。 | INT | 是 | 32 至 MAX_RESOLUTION |
+| `previous_frame_count` | 结束使用姿态 conditioning 的步骤，默认值：1.0。 | INT | 是 | 32 至 MAX_RESOLUTION |
+| `replacement_mode` | 不详。 | BOOLEAN | 是 | true或false |
 **注意：** `pose_video` 输入仅处理前 `length` 帧。`reference_image` 仅处理批次中的第一张图像。当提供了 `reference_image` 时，负 conditioning 会使用相同尺寸的零填充潜在向量。当提供了 `clip_vision_output` 时，它会同时应用于正 conditioning 和负 conditioning。
 
 ## 输出
 
 | 输出名称 | 描述 | 数据类型 |
 | --- | --- | --- |
-| `负向` | 修改后的正 conditioning，可能包含嵌入的参考图像潜在向量、CLIP 视觉输出或姿态视频潜在向量。 | CONDITIONING |
-| `latent` | 修改后的负 conditioning，可能包含嵌入的参考图像潜在向量、CLIP 视觉输出或姿态视频潜在向量。 | CONDITIONING |
-| `video_frame_offset` | 形状为 `[batch_size, 16, ((length - 1) // 4) + 1, height // 8, width // 8]` 的空潜在张量。 | LATENT |
+| `正向` | 修改后的正 conditioning，可能包含嵌入的参考图像潜在向量、CLIP 视觉输出或姿态视频潜在向量。 | CONDITIONING |
+| `负向` | 修改后的负 conditioning，可能包含嵌入的参考图像潜在向量、CLIP 视觉输出或姿态视频潜在向量。 | CONDITIONING |
+| `latent` | 形状为 `[batch_size, 16, ((length - 1) // 4) + 1, height // 8, width // 8]` 的空潜在张量。 | LATENT |
+| `video_frame_offset` | 数值等于长度与video_frame_offset的代数和的整数。 | INTEGER |
 
 > 本文档由 AI 生成。如果您发现任何错误或有改进建议，欢迎贡献！ [在 GitHub 上编辑](https://github.com/Comfy-Org/embedded-docs/blob/main/comfyui_embedded_docs/docs/WanSCAILToVideo/zh.md)
+> 建议把这个傻逼AI贴出来让我们看看，避避雷！
 
 ---
 **Source fingerprint (SHA-256):** `63de4b6fe41fc23ea81c21965a2dbfc82120bb1bad6785b2130af824e015fbcb`
